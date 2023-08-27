@@ -1,0 +1,75 @@
+.paymentContainer{
+display:flex;
+height:100%;
+width:100%;
+justify-content:center;
+
+
+
+
+
+
+
+}
+.paymentForm{
+    display:flex;
+    flex-direction:column;
+gap:4rem;
+box-shadow:0 3px 10px rgb(0 0 0 / 0.2);
+width:30%;
+padding-top:40px;
+height:100%;
+justify-content:center;
+padding-bottom:20px;
+padding-right:20px;
+padding-left:20px;
+}
+input[type=submit]{
+cursor:pointer;
+width:100%;
+background-color:tomato;
+align-self:center;
+font:300 0.9vmax "Roboto";
+padding:0.8vmax;
+text-decoration:none;
+border:none;
+color:white;
+
+}
+.paymentFormBtn:hover{
+background-color:rgb(179,66,46);
+
+
+}
+
+.paymentForm>p{
+    font:300 30px "Roboto";
+border-bottom:1px solid rgba(0, 0, 0, 0.3);
+padding:auto;
+padding-bottom:10px;
+}
+
+
+
+
+.paymentInput{
+width:100%;
+padding:12px 20px;
+margin:8px 0;
+display:inline-block;
+border:1px solid #ccc;
+border-radius:4px;
+box-sizing:border-box;
+
+
+
+
+
+}
+.paymentForm>div>svg{
+    position:absolute;
+
+transform:translateY(1rem);
+    font-size:1.6vmax;
+    color:rgba(0, 0, 0, 0.631);
+}

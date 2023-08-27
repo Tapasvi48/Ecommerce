@@ -4,20 +4,36 @@ const User=require("../model/userModel.js");
 const sendToken = require("../utils/JWTtoken.js");
 const sendEmail=require("../utils/sendEmail.js");
 const crypto=require("crypto");
+const cloudinary=require("cloudinary");
+
 const validator=require("validator");
 //Register
 exports.registerUser=catchAsynceError(async(req,res,next)=>{
+
 const{name,email,password}=req.body;
+const myCloud=await cloudinary.v2.uploader.upload(req.body.avatar,{
+    folder:"avatars",
+    width:150,
+    crop:"scale",
+  })
+
+console.log(myCloud)
+
+
+
+  
+
 const user=await User.create(
     {name,
     email,
     password,
     avatar:{
-public_id:"temporary id",
-url:"profileurl",}
-    }); 
+public_id:myCloud.public_id,
+url:myCloud.secure_url,
+    }}); 
 
-sendToken(user,201,res);
+res.status(200).json({success:true,
+    message:"user created successfully",})
 
  
 
@@ -71,7 +87,7 @@ if(!user){
 const resetToken=user.getResetPasswordToken();
 //save nhi hua hash vala token 
 await user.save({validateBeforeSave:false});
-const resetPasswordUrl=`${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
+const resetPasswordUrl=`${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 const message=`Your reset Password Token is-:\n \n${resetPasswordUrl}\n \n 
 if you have requested this email then please ignore it `;
 try{
@@ -143,21 +159,53 @@ if(req.body.newPassword!==req.body.confirmPassword){
     success:true,
     user,});
     })
-exports.updateProfile=catchAsynceError(async(req,res,next)=>{
-const newUserData={
-name:req.body.name,
-email:req.body.email,}
-//avatar latter
-const user=await User.findByIdAndUpdate(req.user.id,newUserData,{
-new:true,
-runValidators:true,
-useFindAndModify:false,
-});
-//validator not working
-res.status(200).json({
-    success:true,
-});
-});
+
+    exports.updateProfile =catchAsynceError(async (req, res, next) => {
+        const newUserData = {
+          name:req.body.name,
+          email:req.body.email,
+        };
+      
+        if (req.body.avatar !== "") {
+          const user = await User.findById(req.user.id);
+      
+          const imageId = user.avatar.public_id;
+      
+          await cloudinary.v2.uploader.destroy(imageId);
+      
+          const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale",
+          });
+      
+          newUserData.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+        }
+        const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false,
+          });
+        
+          res.status(200).json({
+            success: true,
+          });
+        });
+        
+
+
+
+
+
+
+
+
+
+
+
 //get all user //admin
 exports.getAllUser=catchAsynceError(async(req,res,next)=>{
     const users= await User.find();

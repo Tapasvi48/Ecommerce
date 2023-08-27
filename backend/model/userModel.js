@@ -33,7 +33,9 @@ avatar:{
     },
  role:{type:String,
     default:"user",},
-     
+ createdAt:{
+type:Date,
+default:Date.now,},        
 resetPasswordToken:String,
 resetPasswordExpire:Date,
 });

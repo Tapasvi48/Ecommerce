@@ -25,8 +25,9 @@ if(err.name==="TokenExpiredError"){
     const message=`Json web token is expired try again`;
     err=new ErrorHander(message,400);
 }
-
 res.status(err.statusCode).json({
-success:false,
-message:err.message,
-});};
+    success:false,
+    message:err.message,
+    });
+
+};

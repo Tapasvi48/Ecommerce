@@ -7,6 +7,10 @@ const { query } = require("express");
 //create product
 //admin only 
 exports.createProduct=catchAsynceError(async (req,res,next)=>{
+req.body.user=req.user.id;
+
+
+
 const product =await Product.create(req.body);
 res.status(201).json({
     success:true,
@@ -14,16 +18,28 @@ res.status(201).json({
 })});
 
 //get all product
-exports.getAllProducts=catchAsynceError(async(req,res)=>{ 
-const resultperpage=5;
-const productCount=await Product.countDocuments();
-const apiFeature=new Apifeature(Product.find(),req.query).search().filter().pagination(resultperpage);
-  const product=await apiFeature.query;  
+exports.getAllProducts=catchAsynceError(async(req,res,next)=>{ 
+const resultperpage=2;
+const productsCount=await Product.countDocuments();
+const apiFeature=new Apifeature(Product.find(),req.query)
+.search()
+.filter();
+let products=await apiFeature.query;
+let filteredProductsCount=products.length;
+apiFeature.pagination(resultperpage);
+products=await apiFeature.query.clone();  
 res.status(200).json({success:true,
-    product,
-    productCount,
-     message:"all fine" })
+    products,
+    resultperpage,
+    productsCount,
+    filteredProductsCount,
+})
 });
+// error in fliterd products count pagination
+
+
+
+
 //update product admin action 
 exports.updateProduct=catchAsynceError(async (req,res,next)=>{
 let product= await Product.findById(req.params.id);
@@ -59,8 +75,7 @@ exports.getProductDetails=catchAsynceError(async (req, res, next) => {
   
     res.status(200).json({
       success: true,
-      product,
-      productCount
+      product
     });
   });
 
@@ -136,10 +151,8 @@ new:true,
 runValidators:true,
 useFindAndModify:false,});
 
-
-
 res.status(200).json({
     success:true,})
 
 });
-
+ 

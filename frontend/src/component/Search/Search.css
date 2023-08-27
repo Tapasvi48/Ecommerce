@@ -1,0 +1,44 @@
+.searchbox{
+/* text align works normallly not on flex */
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+/* height jitni dikh rhi he utni*/
+background-color:rgba(197, 193, 193, 0.48);
+/* fixed relative view point*/
+/* relative orignal position ke realtive*/}
+
+.searchbox>input[type="text"]{
+width:50%;
+background-color:white;
+border:2px solid #ccc;
+color:rgba(0, 0, 0, 0.637);
+outline:none;
+padding:1vmax 2vmax;
+border-radius: 2px;
+font:300 1.1vmax ;
+box-sizing:border-box;
+height:8%;
+}
+.searchbox>input[type='submit']{
+width:10%;
+height:8%;
+background-color:rgb(255, 142, 127);
+border:none;
+padding:1vmax;
+font:300 1.1vmax 'Roboto';
+cursor:pointer;
+color:black;
+transition:all 0.5s;}
+
+.searchbox>input[type='submit']:hover{
+background-color:rgba(55, 177, 214, 0.657);
+
+
+
+
+
+
+}
+
